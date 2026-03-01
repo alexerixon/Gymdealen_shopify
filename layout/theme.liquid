@@ -59,6 +59,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    {%- comment -%} Dawn base CSS (required by all Dawn sections) {%- endcomment -%}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
     {%- comment -%} Theme CSS {%- endcomment -%}
     {{ 'theme.css' | asset_url | stylesheet_tag }}
 
@@ -105,6 +108,7 @@
       <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
     </ul>
 
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
     <script src="{{ 'vat-toggle.js' | asset_url }}" defer></script>
     <script src="{{ 'finanslaget.js' | asset_url }}" defer></script>
