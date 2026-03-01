@@ -55,6 +55,9 @@
       "next_slide": "Slide right",
       "previous_slide": "Slide left",
       "name": "Slider"
+    },
+    "meta": {
+      "page": "Page {{ page_num }}"
     }
   },
   "newsletter": {
@@ -78,7 +81,10 @@
     "total_reviews": "total reviews",
     "star_reviews_info": "{{ rating_value }} out of {{ rating_max }} stars",
     "collapsible_content_title": "Collapsible content",
-    "complementary_products": "Complementary products"
+    "complementary_products": "Complementary products",
+    "skip_to_content": "Skip to content",
+    "open": "Open",
+    "navigation_menu": "Navigation menu"
   },
   "blogs": {
     "article": {
@@ -164,7 +170,9 @@
         "from_price_html": "From {{ price }}",
         "regular_price": "Regular price",
         "sale_price": "Sale price",
-        "unit_price": "Unit price"
+        "unit_price": "Unit price",
+        "from": "From",
+        "sale": "Sale"
       },
       "share": "Share this product",
       "sold_out": "Sold out",
@@ -179,7 +187,11 @@
       "taxes_included": "Taxes included.",
       "duties_included": "Duties included.",
       "duties_and_taxes_included": "Duties and taxes included.",
-      "shipping_policy_html": "<a href=\"{{ link }}\">Shipping</a> calculated at checkout."
+      "shipping_policy_html": "<a href=\"{{ link }}\">Shipping</a> calculated at checkout.",
+      "shipping_info": "Shipping & delivery",
+      "shipping_text": "Contact us for a shipping quote. We deliver across Sweden and Europe.",
+      "returns_info": "Return policy",
+      "returns_text": "Contact us within 14 days if there is an issue with your order."
     },
     "modal": {
       "label": "Media gallery"
@@ -214,9 +226,65 @@
       "sort_by_label": "Sort by:",
       "to": "To",
       "clear_filter": "Remove filter"
+    },
+    "condition": {
+      "label": "Condition",
+      "excellent": "Excellent",
+      "very_good": "Very good",
+      "good": "Good"
+    },
+    "specs": {
+      "heading": "Specifications",
+      "brand": "Brand",
+      "year": "Year of manufacture",
+      "weight": "Weight",
+      "max_user_weight": "Max user weight",
+      "power": "Power requirement",
+      "weight_unit": "kg"
+    },
+    "finanslaget": {
+      "heading": "Finance with leasing",
+      "from": "From approx.",
+      "suffix": "/ mo via Finanslaget",
+      "cta": "Apply for leasing",
+      "disclaimer": "Estimated monthly cost. Actual cost determined by Finanslaget."
+    },
+    "search_and_filter": {
+      "filter_by_label": "Filter",
+      "sort_by_label": "Sort",
+      "sort_by": {
+        "manual": "Recommended",
+        "best_selling": "Best selling",
+        "title_ascending": "A–Z",
+        "title_descending": "Z–A",
+        "price_ascending": "Price: Low to high",
+        "price_descending": "Price: High to low",
+        "created_descending": "Newest",
+        "created_ascending": "Oldest"
+      },
+      "clear_all": "Clear all filters",
+      "active_filters": "Active filters",
+      "price_range": {
+        "label": "Price range",
+        "from": "From",
+        "to": "To"
+      },
+      "filter_count": {
+        "one": "{{ count }}",
+        "other": "{{ count }}"
+      },
+      "product_count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
+      },
+      "showing": "Showing {{ from }}–{{ to }} of {{ total }}"
     }
   },
   "templates": {
+    "404": {
+      "title": "Page not found",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "No results found for “{{ terms }}”. Check the spelling or use a different word or phrase.",
       "page": "Page",
@@ -260,10 +328,6 @@
         "post_success": "Thanks for contacting us. We'll get back to you as soon as possible.",
         "error_heading": "Please adjust the following:"
       }
-    },
-    "404": {
-      "title": "Page not found",
-      "subtext": "404"
     }
   },
   "sections": {
@@ -274,14 +338,15 @@
       "announcement": "Announcement",
       "announcement_bar": "Announcement bar"
     },
-
     "header": {
       "announcement": "Announcement",
       "menu": "Menu",
       "cart_count": {
         "one": "{{ count }} item",
         "other": "{{ count }} items"
-      }
+      },
+      "navigation": "Navigation",
+      "close_mobile_menu": "Close menu"
     },
     "cart": {
       "title": "Your cart",
@@ -316,7 +381,12 @@
       }
     },
     "footer": {
-      "payment": "Payment methods"
+      "payment": "Payment methods",
+      "copyright": "© {{ year }} {{ shop_name }}. All rights reserved.",
+      "payment_methods": "Payment methods",
+      "quick_links": "Quick links",
+      "contact": "Contact",
+      "follow_us": "Follow us"
     },
     "featured_blog": {
       "view_all": "View all",
@@ -526,6 +596,60 @@
       "max_characters": "{{ max_chars }} characters max",
       "send_on": "YYYY-MM-DD",
       "send_on_label": "Send on (optional)"
+    }
+  },
+  "header": {
+    "search_placeholder": "Search products...",
+    "cart_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    },
+    "menu": "Menu"
+  },
+  "collection": {
+    "sidebar_heading": "Filters",
+    "filter_drawer_open": "Filter & Sort",
+    "load_more": "Load more",
+    "no_products": "No products match your filters."
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty",
+    "continue_shopping": "Continue shopping",
+    "checkout": "Checkout",
+    "item_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    },
+    "subtotal": "Subtotal",
+    "taxes_and_shipping_policy_at_checkout": "Taxes and shipping calculated at checkout",
+    "remove": "Remove",
+    "quantity": "Quantity"
+  },
+  "vat": {
+    "toggle_label": "Prices shown",
+    "private": "Consumer (incl. VAT)",
+    "company": "Business (excl. VAT)",
+    "incl_suffix": "incl. VAT",
+    "excl_suffix": "excl. VAT"
+  },
+  "search": {
+    "title": "Search results",
+    "placeholder": "Search...",
+    "results_count": {
+      "one": "{{ count }} result for \"{{ terms }}\"",
+      "other": "{{ count }} results for \"{{ terms }}\""
+    },
+    "no_results": "No results for \"{{ terms }}\""
+  },
+  "contact": {
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "send": "Send",
+      "success": "Thank you! We'll be in touch soon."
     }
   }
 }

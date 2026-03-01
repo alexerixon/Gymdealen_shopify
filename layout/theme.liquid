@@ -105,12 +105,12 @@
       <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
     </ul>
 
-    {{ 'theme.js' | asset_url | script_tag }}
-    {{ 'vat-toggle.js' | asset_url | script_tag }}
-    {{ 'finanslaget.js' | asset_url | script_tag }}
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    <script src="{{ 'vat-toggle.js' | asset_url }}" defer></script>
+    <script src="{{ 'finanslaget.js' | asset_url }}" defer></script>
 
     {%- if request.page_type == 'collection' or request.page_type == 'search' -%}
-      {{ 'collection-filters.js' | asset_url | script_tag }}
+      <script src="{{ 'collection-filters.js' | asset_url }}" defer></script>
     {%- endif -%}
   </body>
 </html>

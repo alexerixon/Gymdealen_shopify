@@ -148,7 +148,7 @@ class QuantitySelector {
 
 class CartHandler {
   constructor() {
-    this.form = document.querySelector('[data-type="add-to-cart-form"]');
+    this.form = document.querySelector('.product-form');
     this.cartCount = document.querySelector('[data-cart-count]');
     this.cartToggle = document.querySelector('[data-cart-toggle]');
     this.drawer = document.querySelector('.cart-drawer');

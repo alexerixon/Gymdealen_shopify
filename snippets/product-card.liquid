@@ -11,7 +11,11 @@
     show_vendor — boolean (optional), show brand name
 {% endcomment %}
 
-{%- assign loading = lazy | default: true | ternary: 'lazy', 'eager' -%}
+{%- if lazy -%}
+  {%- assign loading = 'lazy' -%}
+{%- else -%}
+  {%- assign loading = 'eager' -%}
+{%- endif -%}
 {%- assign featured_image = product.featured_media -%}
 
 <article

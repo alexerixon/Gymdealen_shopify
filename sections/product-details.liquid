@@ -127,7 +127,7 @@
         {%- endif -%}
 
         {%- comment -%} Add to cart form {%- endcomment -%}
-        {%- form 'product', product, id: 'product-form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+        {%- form 'product', product, id: 'product-form', class: 'product-form', novalidate: 'novalidate' -%}
           <input type="hidden" name="id" value="{{ current_variant.id }}">
 
           {%- if product.available -%}
@@ -223,7 +223,6 @@
 {% schema %}
 {
   "name": "Product details",
-  "tag": "section",
   "settings": []
 }
 {% endschema %}
