@@ -23,7 +23,7 @@
         "subheading": {
           "type": "text",
           "settings": {
-            "text": "Över 500 maskiner från Life Fitness, Technogym, Precor och fler — till bästa pris."
+            "text": "<p>Över 500 maskiner från Life Fitness, Technogym, Precor och fler — till bästa pris.<\/p>"
           }
         },
         "button": {
@@ -121,7 +121,7 @@
           "type": "column",
           "settings": {
             "title": "Certifierat begagnat",
-            "text": "Alla produkter kontrolleras och klassificeras av våra experter.",
+            "text": "<p>Alla produkter kontrolleras och klassificeras av våra experter.<\/p>",
             "link_label": "",
             "link": ""
           }
@@ -130,7 +130,7 @@
           "type": "column",
           "settings": {
             "title": "Finansiering via leasing",
-            "text": "Finansiera din maskin med förmånlig leasing via Finanslaget.",
+            "text": "<p>Finansiera din maskin med förmånlig leasing via Finanslaget.<\/p>",
             "link_label": "",
             "link": ""
           }
@@ -139,7 +139,7 @@
           "type": "column",
           "settings": {
             "title": "Klarna & Swish",
-            "text": "Betala enkelt med Klarna, Swish eller kort.",
+            "text": "<p>Betala enkelt med Klarna, Swish eller kort.<\/p>",
             "link_label": "",
             "link": ""
           }
@@ -148,7 +148,7 @@
           "type": "column",
           "settings": {
             "title": "Leverans i hela Sverige",
-            "text": "Vi levererar och monterar i hela Sverige. Kontakta oss för offert.",
+            "text": "<p>Vi levererar och monterar i hela Sverige. Kontakta oss för offert.<\/p>",
             "link_label": "",
             "link": ""
           }

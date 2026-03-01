@@ -105,7 +105,7 @@
         "max": 1600,
         "step": 50,
         "unit": "px",
-        "default": 1280
+        "default": 1300
       }
     ]
   },
