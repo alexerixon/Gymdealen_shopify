@@ -1,243 +1,120 @@
 #!/usr/bin/env node
 /**
  * woo-to-shopify.js
- * Gymdealen.se — WooCommerce to Shopify Product Migration Script
+ * Gymdealen — converts product_export.csv (WooCommerce Swedish export)
+ * into a Shopify product import CSV.
  *
- * Usage:
- *   node woo-to-shopify.js --input woo-export.csv --output shopify-products.csv
- *
- * Input:  WooCommerce product export CSV (exported from WP Admin → Products → Export)
- * Output: Shopify product import CSV (import via Shopify Admin → Products → Import)
- *
- * Shopify product CSV columns:
- *   https://help.shopify.com/en/manual/products/import-export/using-csv
+ * Input columns:  Namn, Publicerad, Kort beskrivning, Ordinarie pris, Kategorier
+ * Output:         migration/shopify-import.csv
+ * Usage:          node migration/woo-to-shopify.js
  */
 
 const fs = require('fs');
-const path = require('path');
-const { parse } = require('csv-parse/sync');
-const { stringify } = require('csv-stringify/sync');
 
 // ---------------------------------------------------------------------------
-// Config
+// Category → collection handle (used as primary tag for smart collections)
 // ---------------------------------------------------------------------------
-
-const ARGS = parseArgs(process.argv.slice(2));
-const INPUT_FILE = ARGS['--input'] || 'woo-export.csv';
-const OUTPUT_FILE = ARGS['--output'] || 'shopify-products.csv';
-const VENDOR_NAME = 'Gymdealen';
-
-// WooCommerce category → Shopify collection handle mapping
-const CATEGORY_MAP = {
-  'lopband': 'lopband',
-  'löpband': 'lopband',
-  'treadmills': 'lopband',
-  'cyklar': 'cyklar-roddmaskiner',
-  'bikes': 'cyklar-roddmaskiner',
-  'roddmaskiner': 'cyklar-roddmaskiner',
-  'rowers': 'cyklar-roddmaskiner',
-  'crosstrainers': 'crosstrainers',
-  'elliptical': 'crosstrainers',
-  'styrketraning': 'styrketraning',
-  'styrketräning': 'styrketraning',
-  'strength': 'styrketraning',
-  'kabelmaskiner': 'kabelmaskiner',
-  'cable machines': 'kabelmaskiner',
-  'fria vikter': 'fria-vikter',
-  'free weights': 'fria-vikter',
+const CAT_TO_COLLECTION = {
+  'Kondition > Löpband':                        'lopband',
+  'Kondition > Crosstrainer':                   'crosstrainers',
+  'Kondition > Motionscykel':                   'cyklar-roddmaskiner',
+  'Kabelmaskiner':                              'kabelmaskiner',
+  'Kabelmaskiner > Cable cross':                'kabelmaskiner',
+  'Kabelmaskiner > Multistationer':             'kabelmaskiner',
+  'Styrkemaskiner':                             'styrketraning',
+  'Styrkemaskiner > Axelpress':                 'styrketraning',
+  'Styrkemaskiner > Benpress':                  'styrketraning',
+  'Styrkemaskiner > Benspark':                  'styrketraning',
+  'Styrkemaskiner > Bröstpress':                'styrketraning',
+  'Styrkemaskiner > Cable cross':               'kabelmaskiner',
+  'Friviktsmaskiner':                           'styrketraning',
+  'Friviktsmaskiner > Friviktsmaskiner ben':    'styrketraning',
+  'Friviktsmaskiner > Friviktsmaskiner överkropp': 'styrketraning',
+  'Friviktsmaskiner > Friviktsmaskiner övrigt': 'styrketraning',
+  'Viktmagasinsmaskiner':                       'styrketraning',
+  'Viktmagasinsmaskiner > Viktmagasinsmaskiner Benmaskiner':  'styrketraning',
+  'Viktmagasinsmaskiner > Viktmagasinsmaskiner överkropp':    'styrketraning',
+  'Viktmagasinsmaskiner > Viktmagasinsmaskiner Övrig':        'styrketraning',
+  'Fria vikter':                                'fria-vikter',
+  'Fria vikter > Hantlar':                      'fria-vikter',
+  'Fria vikter > Skivstänger':                  'fria-vikter',
+  'Fria vikter > Viktpaket':                    'fria-vikter',
+  'Fria vikter > hantelset':                    'fria-vikter',
+  'Hela serier':                                'hela-serier',
+  'Övrigt':                                     'ovrigt',
+  'Övrigt > Golv':                              'ovrigt',
+  'Övrigt > Rack':                              'ovrigt',
+  'Övrigt > Smithmaskin':                       'ovrigt',
+  'Övrigt > Övriga':                            'ovrigt',
 };
 
-// Shopify CSV column headers (in required order)
-const SHOPIFY_HEADERS = [
-  'Handle',
-  'Title',
-  'Body (HTML)',
-  'Vendor',
-  'Product Category',
-  'Type',
-  'Tags',
-  'Published',
-  'Option1 Name',
-  'Option1 Value',
-  'Variant SKU',
-  'Variant Grams',
-  'Variant Inventory Tracker',
-  'Variant Inventory Qty',
-  'Variant Inventory Policy',
-  'Variant Fulfillment Service',
-  'Variant Price',
-  'Variant Compare At Price',
-  'Variant Requires Shipping',
-  'Variant Taxable',
-  'Variant Barcode',
-  'Image Src',
-  'Image Position',
-  'Image Alt Text',
-  'Gift Card',
-  'SEO Title',
-  'SEO Description',
-  'Google Shopping / Google Product Category',
-  'Google Shopping / Gender',
-  'Google Shopping / Age Group',
-  'Google Shopping / MPN',
-  'Google Shopping / Condition',
-  'Variant Image',
-  'Variant Weight Unit',
-  'Variant Tax Code',
-  'Cost per item',
-  'Status',
-  // Metafields
-  'Metafield: custom.condition [single_line_text_field]',
-  'Metafield: custom.brand [single_line_text_field]',
-  'Metafield: custom.year_of_manufacture [number_integer]',
-  'Metafield: custom.weight_kg [number_decimal]',
-  'Metafield: custom.max_user_weight_kg [number_decimal]',
-  'Metafield: custom.power_requirement [single_line_text_field]',
+const COLLECTION_TO_TYPE = {
+  'lopband':             'Löpband',
+  'crosstrainers':       'Crosstrainer',
+  'cyklar-roddmaskiner': 'Motionscykel',
+  'kabelmaskiner':       'Kabelmaskin',
+  'styrketraning':       'Styrkemaskin',
+  'fria-vikter':         'Fria vikter',
+  'hela-serier':         'Hela serier',
+  'ovrigt':              'Övrigt',
+};
+
+const KNOWN_BRANDS = [
+  'Life Fitness', 'Technogym', 'Precor', 'Matrix', 'Cybex',
+  'StarTrac', 'Hammer Strength', 'Nautilus', 'Concept2',
+  'Kettler', 'BH Fitness', 'Spirit', 'Sole', 'NordicTrack',
+  'Impulse', 'Panatta', 'Stairmaster', 'Assault', 'Rogue',
+  'Eleiko', 'Gym80', 'Technogym', 'Torque', 'Keiser',
+  'Indoor', 'Schwinn', 'Bowflex',
 ];
 
 // ---------------------------------------------------------------------------
-// Main
+// CSV helpers (no npm deps)
 // ---------------------------------------------------------------------------
 
-function main() {
-  if (!fs.existsSync(INPUT_FILE)) {
-    console.error(`Error: Input file not found: ${INPUT_FILE}`);
-    console.error('Export products from WooCommerce: WP Admin → Products → Export all products');
-    process.exit(1);
+function parseCSV(text) {
+  const rows = [];
+  const lines = text.split('\n');
+  let i = 0;
+  while (i < lines.length) {
+    let line = lines[i];
+    while ((line.match(/"/g) || []).length % 2 !== 0 && i + 1 < lines.length) {
+      i++;
+      line += '\n' + lines[i];
+    }
+    if (line.trim()) rows.push(parseLine(line));
+    i++;
   }
-
-  console.log(`Reading WooCommerce export: ${INPUT_FILE}`);
-  const raw = fs.readFileSync(INPUT_FILE, 'utf-8');
-
-  let wooProducts;
-  try {
-    wooProducts = parse(raw, {
-      columns: true,
-      skip_empty_lines: true,
-      trim: true,
-      bom: true,
-    });
-  } catch (err) {
-    console.error('CSV parse error:', err.message);
-    process.exit(1);
-  }
-
-  console.log(`Found ${wooProducts.length} WooCommerce products`);
-
-  const shopifyRows = [];
-
-  for (const woo of wooProducts) {
-    // Skip variable product parents — they have no price
-    if (woo.type === 'variable') continue;
-
-    const rows = transformProduct(woo);
-    shopifyRows.push(...rows);
-  }
-
-  const csvOutput = stringify(shopifyRows, {
-    header: true,
-    columns: SHOPIFY_HEADERS,
-  });
-
-  fs.writeFileSync(OUTPUT_FILE, csvOutput, 'utf-8');
-  console.log(`✓ Shopify CSV written: ${OUTPUT_FILE} (${shopifyRows.length} rows)`);
-  console.log('\nNext steps:');
-  console.log('  1. Review the CSV for accuracy');
-  console.log('  2. Shopify Admin → Products → Import → Upload CSV');
-  console.log('  3. Verify metafields are mapped correctly in Shopify Admin → Custom Data');
+  return rows;
 }
 
-// ---------------------------------------------------------------------------
-// Transform a single WooCommerce product row → one or more Shopify CSV rows
-// ---------------------------------------------------------------------------
-
-function transformProduct(woo) {
-  const handle = slugify(woo['Name'] || woo['post_name'] || woo['ID']);
-  const title = woo['Name'] || '';
-  const bodyHtml = woo['Description'] || woo['Short description'] || '';
-  const sku = woo['SKU'] || '';
-  const price = parsePrice(woo['Regular price'] || woo['Sale price'] || woo['Price'] || '0');
-  const compareAtPrice = parsePrice(woo['Regular price'] || '');
-  const salePrice = parsePrice(woo['Sale price'] || '');
-  const finalPrice = salePrice > 0 ? salePrice : price;
-  const finalCompareAt = salePrice > 0 && price > 0 ? price : '';
-
-  const tags = buildTags(woo);
-  const categories = (woo['Categories'] || woo['category'] || '').split(',').map(c => c.trim());
-  const collectionHandle = mapCategory(categories);
-  const type = mapType(categories);
-
-  const imageUrls = parseImages(woo);
-  const seoTitle = woo['Meta: _yoast_wpseo_title'] || woo['SEO Title'] || title;
-  const seoDesc = woo['Meta: _yoast_wpseo_metadesc'] || woo['SEO Description'] || '';
-
-  // Extract custom gym equipment metafields
-  const condition = mapCondition(woo['Meta: _condition'] || woo['Condition'] || tags);
-  const brand = woo['Meta: _brand'] || woo['Brand'] || extractBrand(title);
-  const yearOfMfr = woo['Meta: _year_of_manufacture'] || woo['Year'] || '';
-  const weightKg = parseFloat(woo['Weight (kg)'] || woo['Weight'] || '') || '';
-  const maxUserWeight = woo['Meta: _max_user_weight_kg'] || '';
-  const powerReq = woo['Meta: _power_requirement'] || '';
-
-  const baseRow = {
-    'Handle': handle,
-    'Title': title,
-    'Body (HTML)': bodyHtml,
-    'Vendor': brand || VENDOR_NAME,
-    'Product Category': collectionHandle,
-    'Type': type,
-    'Tags': tags,
-    'Published': 'TRUE',
-    'Option1 Name': 'Title',
-    'Option1 Value': 'Default Title',
-    'Variant SKU': sku,
-    'Variant Grams': weightKg ? String(Math.round(weightKg * 1000)) : '',
-    'Variant Inventory Tracker': 'shopify',
-    'Variant Inventory Qty': woo['Stock'] || woo['Quantity'] || '1',
-    'Variant Inventory Policy': 'deny',
-    'Variant Fulfillment Service': 'manual',
-    'Variant Price': String(finalPrice),
-    'Variant Compare At Price': String(finalCompareAt),
-    'Variant Requires Shipping': 'TRUE',
-    'Variant Taxable': 'TRUE',
-    'Variant Barcode': woo['GTIN, UPC, EAN, or ISBN'] || '',
-    'Image Src': imageUrls[0] || '',
-    'Image Position': '1',
-    'Image Alt Text': title,
-    'Gift Card': 'FALSE',
-    'SEO Title': seoTitle,
-    'SEO Description': seoDesc,
-    'Google Shopping / Google Product Category': '',
-    'Google Shopping / Gender': '',
-    'Google Shopping / Age Group': '',
-    'Google Shopping / MPN': sku,
-    'Google Shopping / Condition': 'used',
-    'Variant Image': '',
-    'Variant Weight Unit': 'kg',
-    'Variant Tax Code': '',
-    'Cost per item': '',
-    'Status': 'active',
-    'Metafield: custom.condition [single_line_text_field]': condition,
-    'Metafield: custom.brand [single_line_text_field]': brand,
-    'Metafield: custom.year_of_manufacture [number_integer]': String(yearOfMfr),
-    'Metafield: custom.weight_kg [number_decimal]': String(weightKg),
-    'Metafield: custom.max_user_weight_kg [number_decimal]': String(maxUserWeight),
-    'Metafield: custom.power_requirement [single_line_text_field]': powerReq,
-  };
-
-  const rows = [baseRow];
-
-  // Additional images (image rows have only Handle + Image columns)
-  for (let i = 1; i < imageUrls.length; i++) {
-    rows.push({
-      'Handle': handle,
-      'Image Src': imageUrls[i],
-      'Image Position': String(i + 1),
-      'Image Alt Text': `${title} - bild ${i + 1}`,
-    });
+function parseLine(line) {
+  const cells = [];
+  let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQ && line[i + 1] === '"') { cur += '"'; i++; }
+      else inQ = !inQ;
+    } else if (c === ',' && !inQ) {
+      cells.push(cur); cur = '';
+    } else {
+      cur += c;
+    }
   }
+  cells.push(cur);
+  return cells;
+}
 
-  return rows;
+function csvEscape(val) {
+  const s = val === null || val === undefined ? '' : String(val);
+  return (s.includes(',') || s.includes('"') || s.includes('\n'))
+    ? '"' + s.replace(/"/g, '""') + '"'
+    : s;
+}
+
+function toCSVRow(obj, headers) {
+  return headers.map(h => csvEscape(obj[h] ?? '')).join(',');
 }
 
 // ---------------------------------------------------------------------------
@@ -247,104 +124,132 @@ function transformProduct(woo) {
 function slugify(str) {
   return (str || '')
     .toLowerCase()
-    .replace(/å/g, 'a')
-    .replace(/ä/g, 'a')
-    .replace(/ö/g, 'o')
+    .replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
 
-function parsePrice(str) {
-  const num = parseFloat((str || '').replace(/[^\d.,]/g, '').replace(',', '.'));
-  return isNaN(num) ? 0 : num;
-}
-
-function parseImages(woo) {
-  const mainImage = woo['Images'] || woo['Image URL'] || woo['image_url'] || '';
-  const galleryImages = woo['Gallery Image URLs'] || woo['gallery_image_urls'] || '';
-  const all = [mainImage, ...galleryImages.split(',')]
-    .map(u => u.trim())
-    .filter(Boolean);
-  return [...new Set(all)]; // deduplicate
-}
-
-function buildTags(woo) {
-  const tags = new Set();
-
-  // Tags from WooCommerce
-  const wooTags = (woo['Tags'] || woo['tag'] || '').split(',').map(t => t.trim()).filter(Boolean);
-  wooTags.forEach(t => tags.add(t));
-
-  // Categories as tags
-  const cats = (woo['Categories'] || woo['category'] || '').split(',').map(c => c.trim()).filter(Boolean);
-  cats.forEach(c => tags.add(c));
-
-  // Add "begagnat" (used equipment) tag universally
-  tags.add('begagnat');
-  tags.add('gymmaskin');
-
-  return [...tags].join(', ');
-}
-
-function mapCategory(categories) {
-  for (const cat of categories) {
-    const key = cat.toLowerCase().trim();
-    if (CATEGORY_MAP[key]) return CATEGORY_MAP[key];
-    // Partial match
-    for (const [k, v] of Object.entries(CATEGORY_MAP)) {
-      if (key.includes(k) || k.includes(key)) return v;
-    }
+function getCollection(categories) {
+  for (const [cat, handle] of Object.entries(CAT_TO_COLLECTION)) {
+    if (categories.includes(cat)) return handle;
   }
-  return 'ovrigt'; // fallback collection
+  return 'ovrigt';
 }
 
-function mapType(categories) {
-  const handle = mapCategory(categories);
-  const typeMap = {
-    'lopband': 'Löpband',
-    'cyklar-roddmaskiner': 'Cyklar & Roddmaskiner',
-    'crosstrainers': 'Crosstrainers',
-    'styrketraning': 'Styrketräning',
-    'kabelmaskiner': 'Kabelmaskiner',
-    'fria-vikter': 'Fria vikter',
-  };
-  return typeMap[handle] || 'Gymutrustning';
-}
-
-function mapCondition(value) {
-  if (!value) return '';
-  const v = value.toLowerCase();
-  if (v.includes('utmärkt') || v.includes('excellent') || v.includes('utm')) return 'Utmärkt';
-  if (v.includes('mycket bra') || v.includes('very good')) return 'Mycket bra';
-  if (v.includes('bra') || v.includes('good')) return 'Bra';
-  return value; // pass through if unknown
-}
-
-function extractBrand(title) {
-  const knownBrands = [
-    'Life Fitness', 'Technogym', 'Precor', 'Matrix', 'Cybex',
-    'StarTrac', 'Hammer Strength', 'Nautilus', 'Concept2',
-    'Kettler', 'BH Fitness', 'Spirit', 'Sole', 'NordicTrack',
-  ];
-  for (const brand of knownBrands) {
+function extractBrand(title, categories) {
+  // Best source: "Märken > BrandName" category
+  for (const cat of categories) {
+    const m = cat.match(/^Märken > (.+)$/);
+    if (m) return m[1].trim();
+  }
+  // Known brand in title
+  for (const brand of KNOWN_BRANDS) {
     if (title.toLowerCase().includes(brand.toLowerCase())) return brand;
   }
   return '';
 }
 
-function parseArgs(argv) {
-  const args = {};
-  for (let i = 0; i < argv.length; i++) {
-    if (argv[i].startsWith('--')) {
-      args[argv[i]] = argv[i + 1] || true;
-      i++;
-    }
-  }
-  return args;
+function stripHtml(html) {
+  return (html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 // ---------------------------------------------------------------------------
-// Run
+// Main
 // ---------------------------------------------------------------------------
+
+const HEADERS = [
+  'Handle', 'Title', 'Body (HTML)', 'Vendor', 'Type', 'Tags', 'Published',
+  'Option1 Name', 'Option1 Value',
+  'Variant SKU', 'Variant Inventory Policy', 'Variant Fulfillment Service',
+  'Variant Price', 'Variant Requires Shipping', 'Variant Taxable',
+  'Gift Card', 'SEO Title', 'SEO Description', 'Status',
+  'Metafield: custom.brand [single_line_text_field]',
+];
+
+function main() {
+  const inputFile  = 'product_export.csv';
+  const outputFile = 'migration/shopify-import.csv';
+
+  if (!fs.existsSync(inputFile)) {
+    console.error('Error: product_export.csv not found in', process.cwd());
+    process.exit(1);
+  }
+
+  const raw  = fs.readFileSync(inputFile, 'utf-8').replace(/^\uFEFF/, '');
+  const rows = parseCSV(raw);
+  const colNames = rows[0]; // ['Namn', 'Publicerad', 'Kort beskrivning', 'Ordinarie pris', 'Kategorier']
+  const dataRows = rows.slice(1).filter(r => r.length >= colNames.length && r[0]);
+
+  console.log(`Parsed ${dataRows.length} products from ${inputFile}`);
+
+  const toObj = row => Object.fromEntries(colNames.map((h, i) => [h, (row[i] || '').trim()]));
+
+  const usedHandles = new Set();
+  const output = [HEADERS.join(',')];
+  let count = 0;
+
+  for (const row of dataRows) {
+    const p = toObj(row);
+    const title = p['Namn'];
+    if (!title) continue;
+
+    const categories = p['Kategorier'].split(',').map(c => c.trim()).filter(Boolean);
+    const collection = getCollection(categories);
+    const type       = COLLECTION_TO_TYPE[collection] || 'Gymutrustning';
+    const brand      = extractBrand(title, categories);
+    const price      = parseFloat(p['Ordinarie pris']) || 0;
+    const published  = p['Publicerad'] === '1';
+
+    // Tags: collection handle + meaningful subcategory slugs + brand + begagnat
+    const tagSet = new Set(['begagnat', collection]);
+    for (const cat of categories) {
+      if (['Alla', 'Märken', 'Uncategorized', 'Kondition'].includes(cat)) continue;
+      if (cat.startsWith('Märken >')) continue;
+      tagSet.add(slugify(cat));
+    }
+    if (brand) tagSet.add(slugify(brand));
+    const tags = [...tagSet].join(', ');
+
+    // Unique URL handle
+    let handle = slugify(title);
+    let candidate = handle;
+    let n = 1;
+    while (usedHandles.has(candidate)) candidate = `${handle}-${++n}`;
+    usedHandles.add(candidate);
+
+    const seoDesc = stripHtml(p['Kort beskrivning']).slice(0, 320);
+
+    const product = {
+      'Handle':                      candidate,
+      'Title':                       title,
+      'Body (HTML)':                 p['Kort beskrivning'],
+      'Vendor':                      brand || 'Gymdealen',
+      'Type':                        type,
+      'Tags':                        tags,
+      'Published':                   published ? 'TRUE' : 'FALSE',
+      'Option1 Name':                'Title',
+      'Option1 Value':               'Default Title',
+      'Variant SKU':                 '',
+      'Variant Inventory Policy':    'deny',
+      'Variant Fulfillment Service': 'manual',
+      'Variant Price':               price.toFixed(2),
+      'Variant Requires Shipping':   'TRUE',
+      'Variant Taxable':             'TRUE',
+      'Gift Card':                   'FALSE',
+      'SEO Title':                   title,
+      'SEO Description':             seoDesc,
+      'Status':                      published ? 'active' : 'draft',
+      'Metafield: custom.brand [single_line_text_field]': brand,
+    };
+
+    output.push(toCSVRow(product, HEADERS));
+    count++;
+  }
+
+  fs.writeFileSync(outputFile, output.join('\n'), 'utf-8');
+  console.log(`✓ ${count} products written to ${outputFile}`);
+  console.log('\nNext: Shopify Admin → Products → Import → upload migration/shopify-import.csv');
+  console.log('      Check "Overwrite products with matching handles" if re-importing.');
+}
 
 main();
