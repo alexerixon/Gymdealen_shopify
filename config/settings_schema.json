@@ -1,0 +1,237 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Gymdealen",
+    "theme_version": "1.0.0",
+    "theme_author": "Gymdealen.se",
+    "theme_documentation_url": "https://gymdealen.se",
+    "theme_support_url": "https://gymdealen.se/pages/kontakt"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary color",
+        "default": "#1a1a1a",
+        "info": "Main brand color — used for headings and primary buttons"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent color",
+        "default": "#e63329",
+        "info": "Bold accent for CTAs, badges, and highlights"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Page background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Body text color",
+        "default": "#1a1a1a"
+      },
+      {
+        "type": "color",
+        "id": "color_text_muted",
+        "label": "Muted text color",
+        "default": "#6b7280"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Border color",
+        "default": "#e5e7eb"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Card / surface color",
+        "default": "#f9fafb"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body font",
+        "default": "inter_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "label": "Heading font",
+        "default": "inter_n7"
+      },
+      {
+        "type": "range",
+        "id": "font_body_size",
+        "label": "Body font size",
+        "min": 14,
+        "max": 18,
+        "step": 1,
+        "unit": "px",
+        "default": 16
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "border_radius",
+        "label": "Border radius",
+        "min": 0,
+        "max": 16,
+        "step": 2,
+        "unit": "px",
+        "default": 6,
+        "info": "Applied to cards, buttons, and form inputs"
+      },
+      {
+        "type": "range",
+        "id": "page_width",
+        "label": "Max page width",
+        "min": 1000,
+        "max": 1600,
+        "step": 50,
+        "unit": "px",
+        "default": 1280
+      }
+    ]
+  },
+  {
+    "name": "Logo",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_dark",
+        "label": "Logo image (dark background)"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Logo width",
+        "min": 80,
+        "max": 400,
+        "step": 10,
+        "unit": "px",
+        "default": 160
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          { "value": "drawer", "label": "Slide-out drawer" },
+          { "value": "page", "label": "Cart page" }
+        ],
+        "default": "drawer"
+      }
+    ]
+  },
+  {
+    "name": "Finanslaget",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "finanslaget_embed_code",
+        "label": "Finanslaget embed code",
+        "info": "Paste the embed code provided by Finanslaget here. It will appear on every product page. Leave blank to show a simple monthly estimate calculation instead."
+      },
+      {
+        "type": "text",
+        "id": "finanslaget_lease_months",
+        "label": "Default lease months",
+        "default": "36",
+        "info": "Used for the fallback monthly estimate (price ÷ months)"
+      },
+      {
+        "type": "checkbox",
+        "id": "finanslaget_enabled",
+        "label": "Show Finanslaget lease widget",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Product page",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_condition_badge",
+        "label": "Show condition badge",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_specs_table",
+        "label": "Show specs table (brand, year, weight, power)",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vat_toggle",
+        "label": "Show B2B/B2C VAT toggle in header",
+        "default": true,
+        "info": "Lets visitors switch between incl. and excl. 25% Swedish VAT"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_linkedin_link",
+        "label": "LinkedIn URL"
+      }
+    ]
+  },
+  {
+    "name": "Animations",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "animations_reveal_on_scroll",
+        "label": "Animate sections on scroll",
+        "default": false,
+        "info": "Fade-in sections as they enter the viewport. Disable for best performance."
+      }
+    ]
+  }
+]

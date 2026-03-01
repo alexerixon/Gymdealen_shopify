@@ -1,0 +1,87 @@
+{% comment %}
+  snippets/product-card.liquid
+  Individual product card for collection grid
+
+  Usage:
+    render 'product-card', product: product, lazy: forloop.index > 4
+
+  Parameters:
+    product — the product object
+    lazy    — boolean, whether to lazy-load the image (true for cards below the fold)
+    show_vendor — boolean (optional), show brand name
+{% endcomment %}
+
+{%- assign loading = lazy | default: true | ternary: 'lazy', 'eager' -%}
+{%- assign featured_image = product.featured_media -%}
+
+<article
+  class="product-card"
+  aria-label="{{ product.title | escape }}"
+  data-product-id="{{ product.id }}"
+>
+  <a href="{{ product.url }}" class="product-card__link" tabindex="-1" aria-hidden="true">
+    <div class="product-card__image-wrap">
+      {%- if featured_image -%}
+        {{
+          featured_image
+          | image_url: width: 600
+          | image_tag:
+            width: featured_image.width,
+            height: featured_image.height,
+            class: 'product-card__image',
+            alt: featured_image.alt | escape,
+            loading: loading
+        }}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'product-card__image product-card__image--placeholder' }}
+      {%- endif -%}
+
+      {%- comment -%} Condition badge overlaid on image {%- endcomment -%}
+      {%- if product.metafields.custom.condition != blank -%}
+        <div class="product-card__condition">
+          {%- render 'product-condition', condition: product.metafields.custom.condition.value -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Sale badge {%- endcomment -%}
+      {%- if product.compare_at_price > product.price -%}
+        <span class="product-card__sale-badge">Rea</span>
+      {%- endif -%}
+    </div>
+  </a>
+
+  <div class="product-card__info">
+    {%- if product.metafields.custom.brand != blank -%}
+      <p class="product-card__brand">{{ product.metafields.custom.brand.value }}</p>
+    {%- endif -%}
+
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}" class="product-card__title-link">{{ product.title }}</a>
+    </h3>
+
+    <div class="product-card__price-row">
+      {%- if product.compare_at_price > product.price -%}
+        <span class="price price--sale" data-price-incl="{{ product.price }}">
+          {{ product.price | money }}
+        </span>
+        <span class="price price--compare">
+          <s>{{ product.compare_at_price | money }}</s>
+        </span>
+      {%- else -%}
+        <span class="price" data-price-incl="{{ product.price }}">
+          {{ product.price | money }}
+        </span>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Quick lease estimate {%- endcomment -%}
+    {%- if settings.finanslaget_enabled -%}
+      {%- assign lease_months = settings.finanslaget_lease_months | default: 36 | plus: 0 -%}
+      {%- assign price_sek = product.price | divided_by: 100.0 -%}
+      {%- assign monthly = price_sek | divided_by: lease_months | ceil -%}
+      <p class="product-card__lease-hint" data-lease-hint>
+        {{ 'products.finanslaget.from' | t }} {{ monthly }} kr/mån
+      </p>
+    {%- endif -%}
+  </div>
+</article>

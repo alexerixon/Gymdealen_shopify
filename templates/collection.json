@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "collection-filters",
+      "settings": {
+        "products_per_page": 24,
+        "grid_columns": "4"
+      }
+    }
+  },
+  "order": ["main"]
+}

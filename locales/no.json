@@ -1,0 +1,124 @@
+{
+  "general": {
+    "meta": {
+      "page": "Side {{ page_num }}"
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "Hopp til innhold",
+    "refresh_page": "Siden ble oppdatert",
+    "link_messages": {
+      "new_window": "Åpnes i nytt vindu"
+    },
+    "close": "Lukk",
+    "open": "Åpne",
+    "navigation_menu": "Navigasjonsmeny"
+  },
+  "header": {
+    "search_placeholder": "Søk produkter...",
+    "cart_count": {
+      "one": "{{ count }} vare",
+      "other": "{{ count }} varer"
+    },
+    "menu": "Meny"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Legg i handlekurv",
+      "sold_out": "Utsolgt",
+      "unavailable": "Ikke tilgjengelig",
+      "quantity": "Antall",
+      "price": {
+        "from": "Fra",
+        "sale": "Salg",
+        "regular_price": "Ordinær pris",
+        "sale_price": "Salgspris"
+      },
+      "description": "Beskrivelse",
+      "shipping_info": "Frakt & levering",
+      "shipping_text": "Kontakt oss for frakttilbud. Vi leverer til hele Skandinavia.",
+      "returns_info": "Returpolicy",
+      "returns_text": "Kontakt oss innen 14 dager ved problemer med bestillingen.",
+      "share": "Del"
+    },
+    "condition": {
+      "label": "Tilstand",
+      "excellent": "Utmerket",
+      "very_good": "Meget bra",
+      "good": "Bra"
+    },
+    "specs": {
+      "heading": "Spesifikasjoner",
+      "brand": "Merke",
+      "year": "Produksjonsår",
+      "weight": "Vekt",
+      "max_user_weight": "Maks brukervekt",
+      "power": "Strømbehov",
+      "weight_unit": "kg"
+    },
+    "finanslaget": {
+      "heading": "Finansier med leasing",
+      "from": "Fra ca.",
+      "suffix": "/ mnd via Finanslaget",
+      "cta": "Søk om leasing",
+      "disclaimer": "Estimert månedskostnad. Faktisk kostnad fastsettes av Finanslaget."
+    },
+    "search_and_filter": {
+      "filter_by_label": "Filtrer",
+      "sort_by_label": "Sorter",
+      "sort_by": {
+        "manual": "Anbefalte",
+        "best_selling": "Bestselgere",
+        "title_ascending": "A–Å",
+        "title_descending": "Å–A",
+        "price_ascending": "Pris: Lavest",
+        "price_descending": "Pris: Høyest",
+        "created_descending": "Nyeste",
+        "created_ascending": "Eldste"
+      },
+      "clear_all": "Fjern alle filter",
+      "active_filters": "Aktive filter",
+      "price_range": {
+        "label": "Prisintervall",
+        "from": "Fra",
+        "to": "Til"
+      },
+      "product_count": {
+        "one": "{{ count }} produkt",
+        "other": "{{ count }} produkter"
+      }
+    }
+  },
+  "collection": {
+    "sidebar_heading": "Filter",
+    "filter_drawer_open": "Filter & Sorter",
+    "load_more": "Last inn flere",
+    "no_products": "Ingen produkter matcher filtrene dine."
+  },
+  "cart": {
+    "title": "Handlekurv",
+    "empty": "Handlekurven er tom",
+    "continue_shopping": "Fortsett å handle",
+    "checkout": "Til kassen",
+    "subtotal": "Delsum",
+    "remove": "Fjern",
+    "quantity": "Antall"
+  },
+  "vat": {
+    "toggle_label": "Priser vises",
+    "private": "Privatperson (inkl. mva)",
+    "company": "Bedrift (ekskl. mva)",
+    "incl_suffix": "inkl. mva",
+    "excl_suffix": "ekskl. mva"
+  },
+  "search": {
+    "title": "Søkeresultater",
+    "placeholder": "Søk...",
+    "no_results": "Ingen resultater for \"{{ terms }}\""
+  },
+  "sections": {
+    "footer": {
+      "copyright": "© {{ year }} {{ shop_name }}. Alle rettigheter forbeholdt."
+    }
+  }
+}

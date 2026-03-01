@@ -1,0 +1,118 @@
+{
+  "general": {
+    "meta": {
+      "page": "Seite {{ page_num }}"
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "Zum Inhalt springen",
+    "refresh_page": "Seite aktualisiert",
+    "link_messages": {
+      "new_window": "Öffnet in einem neuen Fenster"
+    },
+    "close": "Schließen",
+    "open": "Öffnen",
+    "navigation_menu": "Navigationsmenü"
+  },
+  "header": {
+    "search_placeholder": "Produkte suchen...",
+    "cart_count": {
+      "one": "{{ count }} Artikel",
+      "other": "{{ count }} Artikel"
+    },
+    "menu": "Menü"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "In den Warenkorb",
+      "sold_out": "Ausverkauft",
+      "unavailable": "Nicht verfügbar",
+      "quantity": "Menge",
+      "price": {
+        "from": "Ab",
+        "sale": "Angebot",
+        "regular_price": "Regulärer Preis",
+        "sale_price": "Angebotspreis"
+      },
+      "description": "Beschreibung",
+      "shipping_info": "Versand & Lieferung",
+      "shipping_text": "Kontaktieren Sie uns für ein Versandangebot. Wir liefern in ganz Europa.",
+      "returns_info": "Rückgaberecht",
+      "returns_text": "Kontaktieren Sie uns innerhalb von 14 Tagen bei Problemen mit Ihrer Bestellung.",
+      "share": "Teilen"
+    },
+    "condition": {
+      "label": "Zustand",
+      "excellent": "Ausgezeichnet",
+      "very_good": "Sehr gut",
+      "good": "Gut"
+    },
+    "specs": {
+      "heading": "Spezifikationen",
+      "brand": "Marke",
+      "year": "Herstellungsjahr",
+      "weight": "Gewicht",
+      "max_user_weight": "Max. Benutzergewicht",
+      "power": "Strombedarf",
+      "weight_unit": "kg"
+    },
+    "finanslaget": {
+      "heading": "Mit Leasing finanzieren",
+      "from": "Ab ca.",
+      "suffix": "/ Mon. über Finanslaget",
+      "cta": "Leasing beantragen",
+      "disclaimer": "Geschätzte Monatskosten. Tatsächliche Kosten werden von Finanslaget festgelegt."
+    },
+    "search_and_filter": {
+      "filter_by_label": "Filtern",
+      "sort_by_label": "Sortieren",
+      "sort_by": {
+        "manual": "Empfohlen",
+        "best_selling": "Bestseller",
+        "title_ascending": "A–Z",
+        "title_descending": "Z–A",
+        "price_ascending": "Preis: Aufsteigend",
+        "price_descending": "Preis: Absteigend",
+        "created_descending": "Neueste",
+        "created_ascending": "Älteste"
+      },
+      "clear_all": "Alle Filter löschen",
+      "product_count": {
+        "one": "{{ count }} Produkt",
+        "other": "{{ count }} Produkte"
+      }
+    }
+  },
+  "collection": {
+    "sidebar_heading": "Filter",
+    "filter_drawer_open": "Filtern & Sortieren",
+    "load_more": "Mehr laden",
+    "no_products": "Keine Produkte entsprechen Ihren Filtern."
+  },
+  "cart": {
+    "title": "Warenkorb",
+    "empty": "Ihr Warenkorb ist leer",
+    "continue_shopping": "Weiter einkaufen",
+    "checkout": "Zur Kasse",
+    "subtotal": "Zwischensumme",
+    "remove": "Entfernen",
+    "quantity": "Menge"
+  },
+  "vat": {
+    "toggle_label": "Preise angezeigt",
+    "private": "Privatkunde (inkl. MwSt.)",
+    "company": "Geschäftskunde (exkl. MwSt.)",
+    "incl_suffix": "inkl. MwSt.",
+    "excl_suffix": "exkl. MwSt."
+  },
+  "search": {
+    "title": "Suchergebnisse",
+    "placeholder": "Suchen...",
+    "no_results": "Keine Ergebnisse für \"{{ terms }}\""
+  },
+  "sections": {
+    "footer": {
+      "copyright": "© {{ year }} {{ shop_name }}. Alle Rechte vorbehalten."
+    }
+  }
+}

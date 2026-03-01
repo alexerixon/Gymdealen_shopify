@@ -1,0 +1,156 @@
+{
+  "general": {
+    "meta": {
+      "page": "Page {{ page_num }}"
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "Skip to content",
+    "refresh_page": "Page refreshed",
+    "link_messages": {
+      "new_window": "Opens in a new window"
+    },
+    "close": "Close",
+    "open": "Open",
+    "navigation_menu": "Navigation menu"
+  },
+  "header": {
+    "search_placeholder": "Search products...",
+    "cart_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    },
+    "menu": "Menu"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "quantity": "Quantity",
+      "price": {
+        "from": "From",
+        "sale": "Sale",
+        "regular_price": "Regular price",
+        "sale_price": "Sale price"
+      },
+      "description": "Description",
+      "shipping_info": "Shipping & delivery",
+      "shipping_text": "Contact us for a shipping quote. We deliver across Sweden and Europe.",
+      "returns_info": "Return policy",
+      "returns_text": "Contact us within 14 days if there is an issue with your order.",
+      "share": "Share"
+    },
+    "condition": {
+      "label": "Condition",
+      "excellent": "Excellent",
+      "very_good": "Very good",
+      "good": "Good"
+    },
+    "specs": {
+      "heading": "Specifications",
+      "brand": "Brand",
+      "year": "Year of manufacture",
+      "weight": "Weight",
+      "max_user_weight": "Max user weight",
+      "power": "Power requirement",
+      "weight_unit": "kg"
+    },
+    "finanslaget": {
+      "heading": "Finance with leasing",
+      "from": "From approx.",
+      "suffix": "/ mo via Finanslaget",
+      "cta": "Apply for leasing",
+      "disclaimer": "Estimated monthly cost. Actual cost determined by Finanslaget."
+    },
+    "search_and_filter": {
+      "filter_by_label": "Filter",
+      "sort_by_label": "Sort",
+      "sort_by": {
+        "manual": "Recommended",
+        "best_selling": "Best selling",
+        "title_ascending": "A–Z",
+        "title_descending": "Z–A",
+        "price_ascending": "Price: Low to high",
+        "price_descending": "Price: High to low",
+        "created_descending": "Newest",
+        "created_ascending": "Oldest"
+      },
+      "clear_all": "Clear all filters",
+      "active_filters": "Active filters",
+      "price_range": {
+        "label": "Price range",
+        "from": "From",
+        "to": "To"
+      },
+      "filter_count": {
+        "one": "{{ count }}",
+        "other": "{{ count }}"
+      },
+      "product_count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
+      },
+      "showing": "Showing {{ from }}–{{ to }} of {{ total }}"
+    }
+  },
+  "collection": {
+    "sidebar_heading": "Filters",
+    "filter_drawer_open": "Filter & Sort",
+    "load_more": "Load more",
+    "no_products": "No products match your filters."
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty",
+    "continue_shopping": "Continue shopping",
+    "checkout": "Checkout",
+    "item_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    },
+    "subtotal": "Subtotal",
+    "taxes_and_shipping_policy_at_checkout": "Taxes and shipping calculated at checkout",
+    "remove": "Remove",
+    "quantity": "Quantity"
+  },
+  "vat": {
+    "toggle_label": "Prices shown",
+    "private": "Consumer (incl. VAT)",
+    "company": "Business (excl. VAT)",
+    "incl_suffix": "incl. VAT",
+    "excl_suffix": "excl. VAT"
+  },
+  "search": {
+    "title": "Search results",
+    "placeholder": "Search...",
+    "results_count": {
+      "one": "{{ count }} result for \"{{ terms }}\"",
+      "other": "{{ count }} results for \"{{ terms }}\""
+    },
+    "no_results": "No results for \"{{ terms }}\""
+  },
+  "sections": {
+    "header": {
+      "navigation": "Navigation",
+      "close_mobile_menu": "Close menu"
+    },
+    "footer": {
+      "copyright": "© {{ year }} {{ shop_name }}. All rights reserved.",
+      "payment_methods": "Payment methods",
+      "quick_links": "Quick links",
+      "contact": "Contact",
+      "follow_us": "Follow us"
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "send": "Send",
+      "success": "Thank you! We'll be in touch soon."
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{% comment %}
+  snippets/vat-toggle.liquid
+  Gymdealen.se — B2B / B2C VAT toggle
+
+  Displays a toggle in the header letting visitors choose:
+    Privatperson (inkl. moms)  |  Företag (exkl. moms)
+
+  JavaScript in assets/vat-toggle.js handles:
+    - Reading/writing localStorage('vatMode')
+    - Recalculating all [data-price-incl] elements
+    - Passing correct price to Finanslaget widget
+{% endcomment %}
+
+<div
+  class="vat-toggle"
+  role="group"
+  aria-label="{{ 'vat.toggle_label' | t }}"
+  data-vat-toggle
+>
+  <button
+    class="vat-toggle__btn"
+    data-vat="incl"
+    aria-pressed="true"
+    type="button"
+  >
+    {{ 'vat.private' | t }}
+  </button>
+  <button
+    class="vat-toggle__btn"
+    data-vat="excl"
+    aria-pressed="false"
+    type="button"
+  >
+    {{ 'vat.company' | t }}
+  </button>
+</div>

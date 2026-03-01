@@ -1,0 +1,38 @@
+{% comment %}
+  snippets/product-condition.liquid
+  Renders a color-coded condition badge
+
+  Usage:
+    render 'product-condition', condition: product.metafields.custom.condition.value
+
+  Condition values (Swedish):
+    Utmärkt    → green badge
+    Mycket bra → blue badge
+    Bra        → amber badge
+{% endcomment %}
+
+{%- assign condition_lower = condition | downcase | strip -%}
+
+{%- case condition_lower -%}
+  {%- when 'utmärkt', 'utmarkt', 'excellent' -%}
+    {%- assign badge_class = 'product-condition--excellent' -%}
+    {%- assign badge_label = 'products.condition.excellent' | t -%}
+  {%- when 'mycket bra', 'very good' -%}
+    {%- assign badge_class = 'product-condition--very-good' -%}
+    {%- assign badge_label = 'products.condition.very_good' | t -%}
+  {%- when 'bra', 'good' -%}
+    {%- assign badge_class = 'product-condition--good' -%}
+    {%- assign badge_label = 'products.condition.good' | t -%}
+  {%- else -%}
+    {%- assign badge_class = 'product-condition--unknown' -%}
+    {%- assign badge_label = condition -%}
+{%- endcase -%}
+
+{%- if condition != blank -%}
+  <span class="product-condition product-badge {{ badge_class }}" aria-label="{{ 'products.condition.label' | t }}: {{ badge_label }}">
+    <svg class="product-condition__dot" width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
+      <circle cx="4" cy="4" r="4"/>
+    </svg>
+    {{ badge_label }}
+  </span>
+{%- endif -%}

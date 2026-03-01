@@ -1,0 +1,182 @@
+{% comment %}
+  sections/header.liquid
+  Gymdealen.se — Site header
+  Includes: logo, main navigation, search, VAT toggle, language switcher, cart icon
+{% endcomment %}
+
+<header class="site-header{% if section.settings.sticky_header %} site-header--sticky{% endif %}" data-section-id="{{ section.id }}">
+  <div class="site-header__top-bar">
+    <div class="container">
+      {%- if settings.show_vat_toggle -%}
+        {%- render 'vat-toggle' -%}
+      {%- endif -%}
+      <div class="site-header__top-right">
+        {%- render 'language-switcher' -%}
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{{ routes.account_url }}" class="site-header__account-link" aria-label="Mitt konto">
+            <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="site-header__main">
+    <div class="container site-header__inner">
+      {%- comment -%} Mobile hamburger {%- endcomment -%}
+      <button class="site-header__mobile-menu-toggle" aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ 'header.menu' | t }}">
+        <span class="hamburger">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+
+      {%- comment -%} Logo {%- endcomment -%}
+      <a href="{{ routes.root_url }}" class="site-header__logo-link">
+        {%- if settings.logo != blank -%}
+          {{
+            settings.logo
+            | image_url: width: settings.logo_width
+            | image_tag: width: settings.logo_width, alt: shop.name, class: 'site-header__logo-img'
+          }}
+        {%- else -%}
+          <span class="site-header__logo-text">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+
+      {%- comment -%} Desktop navigation {%- endcomment -%}
+      <nav class="site-header__nav" aria-label="{{ 'sections.header.navigation' | t }}">
+        {%- if section.settings.menu != blank -%}
+          {%- for link in linklists[section.settings.menu].links -%}
+            <div class="site-header__nav-item{% if link.links.size > 0 %} site-header__nav-item--has-dropdown{% endif %}">
+              <a href="{{ link.url }}" class="site-header__nav-link{% if link.active %} site-header__nav-link--active{% endif %}">
+                {{ link.title }}
+                {%- if link.links.size > 0 -%}
+                  <svg class="icon icon--chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M2 4l4 4 4-4"/>
+                  </svg>
+                {%- endif -%}
+              </a>
+              {%- if link.links.size > 0 -%}
+                <div class="site-header__dropdown">
+                  <ul>
+                    {%- for child in link.links -%}
+                      <li>
+                        <a href="{{ child.url }}" class="site-header__dropdown-link{% if child.active %} active{% endif %}">
+                          {{ child.title }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </nav>
+
+      {%- comment -%} Search + Cart {%- endcomment -%}
+      <div class="site-header__actions">
+        <button class="site-header__search-toggle" aria-label="{{ 'header.search_placeholder' | t }}" data-search-toggle>
+          <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+        </button>
+
+        <a href="{{ routes.cart_url }}" class="site-header__cart-link" data-cart-toggle aria-label="{{ 'cart.title' | t }}">
+          <svg class="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          {%- if cart.item_count > 0 -%}
+            <span class="site-header__cart-count" data-cart-count>{{ cart.item_count }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+    </div>
+
+    {%- comment -%} Search bar (initially hidden, toggled by JS) {%- endcomment -%}
+    <div class="site-header__search-bar" id="search-bar" hidden>
+      <div class="container">
+        <form action="{{ routes.search_url }}" method="get" role="search">
+          <input type="hidden" name="type" value="product">
+          <input
+            type="search"
+            name="q"
+            placeholder="{{ 'header.search_placeholder' | t }}"
+            aria-label="{{ 'header.search_placeholder' | t }}"
+            class="site-header__search-input"
+            autocomplete="off"
+          >
+          <button type="submit" aria-label="{{ 'header.search_placeholder' | t }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+
+{%- comment -%} Mobile navigation drawer {%- endcomment -%}
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <div class="mobile-menu__header">
+    <button class="mobile-menu__close" aria-label="{{ 'sections.header.close_mobile_menu' | t }}" data-mobile-menu-close>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="mobile-menu__nav">
+    {%- if section.settings.menu != blank -%}
+      {%- for link in linklists[section.settings.menu].links -%}
+        {%- if link.links.size > 0 -%}
+          <details class="mobile-menu__group">
+            <summary class="mobile-menu__group-toggle">{{ link.title }}</summary>
+            <ul class="mobile-menu__children">
+              {%- for child in link.links -%}
+                <li><a href="{{ child.url }}">{{ child.title }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </details>
+        {%- else -%}
+          <a href="{{ link.url }}" class="mobile-menu__link{% if link.active %} active{% endif %}">{{ link.title }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  </nav>
+  <div class="mobile-menu__footer">
+    {%- render 'language-switcher' -%}
+    {%- if settings.show_vat_toggle -%}
+      {%- render 'vat-toggle' -%}
+    {%- endif -%}
+  </div>
+</div>
+<div class="mobile-menu__overlay" data-mobile-menu-overlay></div>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Main menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

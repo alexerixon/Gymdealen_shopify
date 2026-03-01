@@ -1,0 +1,92 @@
+{% comment %}
+  snippets/filter-group.liquid
+  Renders a single filter accordion group in the collection sidebar
+
+  Usage:
+    render 'filter-group', filter: filter
+
+  filter.type can be:
+    list      — checkboxes (brand, condition, category)
+    price_range — min/max price inputs
+{% endcomment %}
+
+<details
+  class="filter-group"
+  open
+  data-filter-type="{{ filter.type }}"
+  data-filter-param="{{ filter.param_name }}"
+>
+  <summary class="filter-group__toggle">
+    <span class="filter-group__label">{{ filter.label }}</span>
+    {%- if filter.active_values.size > 0 -%}
+      <span class="filter-group__active-count">{{ filter.active_values.size }}</span>
+    {%- endif -%}
+    <svg class="filter-group__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M3 5l4 4 4-4"/>
+    </svg>
+  </summary>
+
+  <div class="filter-group__body">
+    {%- if filter.type == 'price_range' -%}
+      {%- comment -%} Price range filter {%- endcomment -%}
+      <div class="filter-price-range" data-price-range>
+        <div class="filter-price-range__inputs">
+          <div class="filter-price-range__field">
+            <label for="filter-price-min" class="visually-hidden">{{ 'products.search_and_filter.price_range.from' | t }}</label>
+            <span class="filter-price-range__currency">kr</span>
+            <input
+              type="number"
+              id="filter-price-min"
+              name="{{ filter.min_value.param_name }}"
+              value="{{ filter.min_value.value | divided_by: 100 | ceil }}"
+              min="0"
+              max="{{ filter.range_max | divided_by: 100 | ceil }}"
+              class="filter-price-range__input"
+              placeholder="{{ 'products.search_and_filter.price_range.from' | t }}"
+              data-price-min
+            >
+          </div>
+          <span class="filter-price-range__separator">—</span>
+          <div class="filter-price-range__field">
+            <label for="filter-price-max" class="visually-hidden">{{ 'products.search_and_filter.price_range.to' | t }}</label>
+            <span class="filter-price-range__currency">kr</span>
+            <input
+              type="number"
+              id="filter-price-max"
+              name="{{ filter.max_value.param_name }}"
+              value="{{ filter.max_value.value | divided_by: 100 | ceil | default: filter.range_max | divided_by: 100 | ceil }}"
+              min="0"
+              max="{{ filter.range_max | divided_by: 100 | ceil }}"
+              class="filter-price-range__input"
+              placeholder="{{ 'products.search_and_filter.price_range.to' | t }}"
+              data-price-max
+            >
+          </div>
+        </div>
+        <button type="submit" class="filter-price-range__apply btn btn--outline btn--sm">OK</button>
+      </div>
+
+    {%- elsif filter.type == 'list' -%}
+      {%- comment -%} Checkbox list filter {%- endcomment -%}
+      <ul class="filter-list" role="list">
+        {%- for value in filter.values -%}
+          <li class="filter-list__item">
+            <label class="filter-list__label">
+              <input
+                type="checkbox"
+                name="{{ value.param_name }}"
+                value="{{ value.value }}"
+                class="filter-list__checkbox"
+                {% if value.active %}checked{% endif %}
+                {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                data-filter-checkbox
+              >
+              <span class="filter-list__name">{{ value.label }}</span>
+              <span class="filter-list__count">({{ value.count }})</span>
+            </label>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</details>

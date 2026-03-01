@@ -1,0 +1,17 @@
+{% comment %}
+  snippets/sort-by.liquid
+  Sort-by select dropdown for collection pages
+{% endcomment %}
+
+<label class="visually-hidden" for="sort-by-select">{{ 'products.search_and_filter.sort_by_label' | t }}</label>
+<select id="sort-by-select" name="sort_by" class="sort-select" aria-label="{{ 'products.search_and_filter.sort_by_label' | t }}">
+  {%- assign sort_options = 'manual,best_selling,title_ascending,title_descending,price_ascending,price_descending,created_descending,created_ascending' | split: ',' -%}
+  {%- for option in sort_options -%}
+    <option
+      value="{{ option }}"
+      {% if collection.sort_by == option or collection.default_sort_by == option and collection.sort_by == blank %}selected{% endif %}
+    >
+      {{ 'products.search_and_filter.sort_by.' | append: option | t }}
+    </option>
+  {%- endfor -%}
+</select>

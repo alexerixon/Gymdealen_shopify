@@ -1,0 +1,118 @@
+{
+  "general": {
+    "meta": {
+      "page": "Side {{ page_num }}"
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "Spring til indhold",
+    "refresh_page": "Siden er opdateret",
+    "link_messages": {
+      "new_window": "Åbnes i nyt vindue"
+    },
+    "close": "Luk",
+    "open": "Åbn",
+    "navigation_menu": "Navigationsmenu"
+  },
+  "header": {
+    "search_placeholder": "Søg produkter...",
+    "cart_count": {
+      "one": "{{ count }} vare",
+      "other": "{{ count }} varer"
+    },
+    "menu": "Menu"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Læg i kurv",
+      "sold_out": "Udsolgt",
+      "unavailable": "Ikke tilgængelig",
+      "quantity": "Antal",
+      "price": {
+        "from": "Fra",
+        "sale": "Tilbud",
+        "regular_price": "Ordinær pris",
+        "sale_price": "Tilbudspris"
+      },
+      "description": "Beskrivelse",
+      "shipping_info": "Fragt & levering",
+      "shipping_text": "Kontakt os for fragttilbud. Vi leverer til hele Skandinavien.",
+      "returns_info": "Returpolitik",
+      "returns_text": "Kontakt os inden 14 dage ved problemer med din ordre.",
+      "share": "Del"
+    },
+    "condition": {
+      "label": "Stand",
+      "excellent": "Fremragende",
+      "very_good": "Meget god",
+      "good": "God"
+    },
+    "specs": {
+      "heading": "Specifikationer",
+      "brand": "Mærke",
+      "year": "Produktionsår",
+      "weight": "Vægt",
+      "max_user_weight": "Maks. brugervægt",
+      "power": "Strømbehov",
+      "weight_unit": "kg"
+    },
+    "finanslaget": {
+      "heading": "Finansier med leasing",
+      "from": "Fra ca.",
+      "suffix": "/ md. via Finanslaget",
+      "cta": "Ansøg om leasing",
+      "disclaimer": "Estimeret månedlig udgift. Faktisk udgift fastsættes af Finanslaget."
+    },
+    "search_and_filter": {
+      "filter_by_label": "Filtrer",
+      "sort_by_label": "Sorter",
+      "sort_by": {
+        "manual": "Anbefalede",
+        "best_selling": "Bedst sælgende",
+        "title_ascending": "A–Å",
+        "title_descending": "Å–A",
+        "price_ascending": "Pris: Lavest",
+        "price_descending": "Pris: Højest",
+        "created_descending": "Nyeste",
+        "created_ascending": "Ældste"
+      },
+      "clear_all": "Ryd alle filtre",
+      "product_count": {
+        "one": "{{ count }} produkt",
+        "other": "{{ count }} produkter"
+      }
+    }
+  },
+  "collection": {
+    "sidebar_heading": "Filtre",
+    "filter_drawer_open": "Filtrer & Sorter",
+    "load_more": "Indlæs flere",
+    "no_products": "Ingen produkter matcher dine filtre."
+  },
+  "cart": {
+    "title": "Indkøbskurv",
+    "empty": "Din kurv er tom",
+    "continue_shopping": "Fortsæt med at handle",
+    "checkout": "Til kassen",
+    "subtotal": "Delsum",
+    "remove": "Fjern",
+    "quantity": "Antal"
+  },
+  "vat": {
+    "toggle_label": "Priser vises",
+    "private": "Privat (inkl. moms)",
+    "company": "Erhverv (ekskl. moms)",
+    "incl_suffix": "inkl. moms",
+    "excl_suffix": "ekskl. moms"
+  },
+  "search": {
+    "title": "Søgeresultater",
+    "placeholder": "Søg...",
+    "no_results": "Ingen resultater for \"{{ terms }}\""
+  },
+  "sections": {
+    "footer": {
+      "copyright": "© {{ year }} {{ shop_name }}. Alle rettigheder forbeholdt."
+    }
+  }
+}

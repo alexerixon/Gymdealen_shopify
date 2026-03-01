@@ -1,0 +1,166 @@
+{
+  "sections": {
+    "hero": {
+      "type": "image-banner",
+      "settings": {
+        "image_height": "large",
+        "adapt_height_first_image": false,
+        "show_text_box": true,
+        "desktop_content_position": "middle-left",
+        "show_text_below": true,
+        "mobile_content_alignment": "left",
+        "color_scheme": "background-1",
+        "stack_images_on_mobile": false
+      },
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Premiumgym\nutrustning begagnat",
+            "heading_size": "h1"
+          }
+        },
+        "subheading": {
+          "type": "text",
+          "settings": {
+            "text": "Över 500 maskiner från Life Fitness, Technogym, Precor och fler — till bästa pris."
+          }
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "button_label": "Utforska sortimentet",
+            "button_link": "/collections/all",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": ["heading", "subheading", "button"]
+    },
+    "featured-collections": {
+      "type": "collection-list",
+      "settings": {
+        "title": "Kategorier",
+        "heading_size": "h2",
+        "image_ratio": "square",
+        "columns_desktop": 3,
+        "color_scheme": "background-1",
+        "show_view_all": true,
+        "enable_mobile_swipe": true,
+        "columns_mobile": "1.5"
+      },
+      "blocks": {
+        "collection_1": {
+          "type": "featured_collection",
+          "settings": { "collection": "lopband" }
+        },
+        "collection_2": {
+          "type": "featured_collection",
+          "settings": { "collection": "cyklar-roddmaskiner" }
+        },
+        "collection_3": {
+          "type": "featured_collection",
+          "settings": { "collection": "styrketraning" }
+        },
+        "collection_4": {
+          "type": "featured_collection",
+          "settings": { "collection": "kabelmaskiner" }
+        },
+        "collection_5": {
+          "type": "featured_collection",
+          "settings": { "collection": "crosstrainers" }
+        },
+        "collection_6": {
+          "type": "featured_collection",
+          "settings": { "collection": "fria-vikter" }
+        }
+      },
+      "block_order": [
+        "collection_1",
+        "collection_2",
+        "collection_3",
+        "collection_4",
+        "collection_5",
+        "collection_6"
+      ]
+    },
+    "featured-products": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Senaste produkter",
+        "heading_size": "h2",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "color_scheme": "background-2",
+        "enable_mobile_swipe": true,
+        "columns_mobile": "2",
+        "collection": "all",
+        "sort": "created_descending"
+      }
+    },
+    "usp-bar": {
+      "type": "multicolumn",
+      "settings": {
+        "title": "",
+        "heading_size": "h2",
+        "image_ratio": "adapt",
+        "image_width": "third",
+        "button_label": "",
+        "button_link": "",
+        "color_scheme": "background-1",
+        "columns_desktop": 4,
+        "column_alignment": "center",
+        "background_style": "primary",
+        "swipe_on_mobile": false
+      },
+      "blocks": {
+        "usp_1": {
+          "type": "column",
+          "settings": {
+            "title": "Certifierat begagnat",
+            "text": "Alla produkter kontrolleras och klassificeras av våra experter.",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "usp_2": {
+          "type": "column",
+          "settings": {
+            "title": "Finansiering via leasing",
+            "text": "Finansiera din maskin med förmånlig leasing via Finanslaget.",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "usp_3": {
+          "type": "column",
+          "settings": {
+            "title": "Klarna & Swish",
+            "text": "Betala enkelt med Klarna, Swish eller kort.",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "usp_4": {
+          "type": "column",
+          "settings": {
+            "title": "Leverans i hela Sverige",
+            "text": "Vi levererar och monterar i hela Sverige. Kontakta oss för offert.",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": ["usp_1", "usp_2", "usp_3", "usp_4"]
+    }
+  },
+  "order": [
+    "hero",
+    "featured-collections",
+    "featured-products",
+    "usp-bar"
+  ]
+}

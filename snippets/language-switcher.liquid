@@ -1,0 +1,51 @@
+{% comment %}
+  snippets/language-switcher.liquid
+  Renders a locale selector dropdown for Shopify Markets multi-language
+
+  Requires Shopify Markets to be enabled with multiple locales configured.
+  Links to /<locale-iso-code>/ URL structure.
+{% endcomment %}
+
+{%- if localization.available_languages.size > 1 -%}
+  <div class="language-switcher" data-language-switcher>
+    <button
+      class="language-switcher__toggle"
+      aria-expanded="false"
+      aria-controls="language-switcher-list"
+      aria-haspopup="listbox"
+    >
+      <svg class="icon icon--globe" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </svg>
+      <span class="language-switcher__current">{{ localization.language.iso_code | upcase }}</span>
+      <svg class="icon icon--chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M2 4l4 4 4-4"/>
+      </svg>
+    </button>
+
+    {%- form 'localization', id: 'language-switcher-form', class: 'language-switcher__form' -%}
+      <ul
+        class="language-switcher__list"
+        id="language-switcher-list"
+        role="listbox"
+        aria-label="Välj språk"
+        hidden
+      >
+        {%- for language in localization.available_languages -%}
+          <li role="option" aria-selected="{{ language.iso_code == localization.language.iso_code }}">
+            <button
+              type="submit"
+              name="locale_code"
+              value="{{ language.iso_code }}"
+              class="language-switcher__option{% if language.iso_code == localization.language.iso_code %} is-active{% endif %}"
+            >
+              {{ language.endonym_name }}
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endform -%}
+  </div>
+{%- endif -%}

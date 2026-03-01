@@ -1,0 +1,60 @@
+{% comment %}
+  snippets/product-specs.liquid
+  Renders the equipment specifications table from product metafields
+
+  Usage:
+    render 'product-specs', product: product
+{% endcomment %}
+
+{%- assign has_specs = false -%}
+{%- if product.metafields.custom.brand != blank
+  or product.metafields.custom.year_of_manufacture != blank
+  or product.metafields.custom.weight_kg != blank
+  or product.metafields.custom.max_user_weight_kg != blank
+  or product.metafields.custom.power_requirement != blank -%}
+  {%- assign has_specs = true -%}
+{%- endif -%}
+
+{%- if has_specs -%}
+  <div class="product-specs">
+    <h3 class="product-specs__heading">{{ 'products.specs.heading' | t }}</h3>
+    <table class="product-specs__table" aria-label="{{ 'products.specs.heading' | t }}">
+      <tbody>
+        {%- if product.metafields.custom.brand != blank -%}
+          <tr>
+            <th scope="row">{{ 'products.specs.brand' | t }}</th>
+            <td>{{ product.metafields.custom.brand.value }}</td>
+          </tr>
+        {%- endif -%}
+
+        {%- if product.metafields.custom.year_of_manufacture != blank -%}
+          <tr>
+            <th scope="row">{{ 'products.specs.year' | t }}</th>
+            <td>{{ product.metafields.custom.year_of_manufacture.value }}</td>
+          </tr>
+        {%- endif -%}
+
+        {%- if product.metafields.custom.weight_kg != blank -%}
+          <tr>
+            <th scope="row">{{ 'products.specs.weight' | t }}</th>
+            <td>{{ product.metafields.custom.weight_kg.value }} {{ 'products.specs.weight_unit' | t }}</td>
+          </tr>
+        {%- endif -%}
+
+        {%- if product.metafields.custom.max_user_weight_kg != blank -%}
+          <tr>
+            <th scope="row">{{ 'products.specs.max_user_weight' | t }}</th>
+            <td>{{ product.metafields.custom.max_user_weight_kg.value }} {{ 'products.specs.weight_unit' | t }}</td>
+          </tr>
+        {%- endif -%}
+
+        {%- if product.metafields.custom.power_requirement != blank -%}
+          <tr>
+            <th scope="row">{{ 'products.specs.power' | t }}</th>
+            <td>{{ product.metafields.custom.power_requirement.value }}</td>
+          </tr>
+        {%- endif -%}
+      </tbody>
+    </table>
+  </div>
+{%- endif -%}

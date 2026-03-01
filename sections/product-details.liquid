@@ -1,0 +1,229 @@
+{% comment %}
+  sections/product-details.liquid
+  Gymdealen.se — Main product page section
+  Renders: image gallery, title, price, condition badge, specs, Finanslaget widget, ATC
+{% endcomment %}
+
+{%- assign product = section.settings.product | default: product -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign featured_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
+
+<section class="product-details" data-section-id="{{ section.id }}" data-product-id="{{ product.id }}">
+  <div class="container">
+    <div class="product-details__layout">
+
+      {%- comment -%} ——————————————————————————
+        LEFT: Image gallery
+      —————————————————————————— {%- endcomment -%}
+      <div class="product-details__gallery">
+        {%- comment -%} Main image {%- endcomment -%}
+        <div class="product-gallery__main" id="product-gallery-main">
+          {%- if featured_media -%}
+            <div class="product-gallery__slide is-active" data-media-id="{{ featured_media.id }}">
+              {{
+                featured_media
+                | image_url: width: 900
+                | image_tag:
+                  width: featured_media.width,
+                  height: featured_media.height,
+                  class: 'product-gallery__img',
+                  alt: featured_media.alt | escape,
+                  loading: 'eager',
+                  fetchpriority: 'high'
+              }}
+            </div>
+          {%- else -%}
+            <div class="product-gallery__slide is-active">
+              {{ 'product-1' | placeholder_svg_tag: 'product-gallery__img product-gallery__img--placeholder' }}
+            </div>
+          {%- endif -%}
+
+          {%- for media in product.media offset: 1 -%}
+            <div class="product-gallery__slide" data-media-id="{{ media.id }}">
+              {{
+                media
+                | image_url: width: 900
+                | image_tag:
+                  width: media.width,
+                  height: media.height,
+                  class: 'product-gallery__img',
+                  alt: media.alt | escape,
+                  loading: 'lazy'
+              }}
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- comment -%} Thumbnail strip {%- endcomment -%}
+        {%- if product.media.size > 1 -%}
+          <div class="product-gallery__thumbs" id="product-gallery-thumbs" role="list">
+            {%- for media in product.media -%}
+              <button
+                class="product-gallery__thumb{% if forloop.first %} is-active{% endif %}"
+                data-media-id="{{ media.id }}"
+                aria-label="Bild {{ forloop.index }}"
+                role="listitem"
+              >
+                {{
+                  media
+                  | image_url: width: 100
+                  | image_tag: width: 100, height: 100, class: 'product-gallery__thumb-img', alt: media.alt | escape
+                }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ——————————————————————————
+        RIGHT: Product info
+      —————————————————————————— {%- endcomment -%}
+      <div class="product-details__info">
+
+        {%- comment -%} Breadcrumb {%- endcomment -%}
+        {%- if collection -%}
+          <nav class="product-details__breadcrumb" aria-label="Brödsmula">
+            <a href="{{ routes.root_url }}">Hem</a>
+            <span aria-hidden="true">›</span>
+            <a href="{{ collection.url }}">{{ collection.title }}</a>
+            <span aria-hidden="true">›</span>
+            <span aria-current="page">{{ product.title }}</span>
+          </nav>
+        {%- endif -%}
+
+        {%- comment -%} Condition badge + Brand {%- endcomment -%}
+        <div class="product-details__badges">
+          {%- if settings.show_condition_badge and product.metafields.custom.condition != blank -%}
+            {%- render 'product-condition', condition: product.metafields.custom.condition.value -%}
+          {%- endif -%}
+          {%- if product.metafields.custom.brand != blank -%}
+            <span class="product-badge product-badge--brand">{{ product.metafields.custom.brand.value }}</span>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Title {%- endcomment -%}
+        <h1 class="product-details__title">{{ product.title }}</h1>
+
+        {%- comment -%} Price {%- endcomment -%}
+        <div class="product-details__price">
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="price price--sale" data-price-incl="{{ current_variant.price }}">
+              {{ current_variant.price | money }}
+            </span>
+            <span class="price price--compare" data-price-incl="{{ current_variant.compare_at_price }}">
+              <s>{{ current_variant.compare_at_price | money }}</s>
+            </span>
+          {%- else -%}
+            <span class="price" data-price-incl="{{ current_variant.price }}">
+              {{ current_variant.price | money }}
+            </span>
+          {%- endif -%}
+          <span class="price-vat-label">{{ 'vat.incl_suffix' | t }}</span>
+        </div>
+
+        {%- comment -%} Finanslaget lease widget {%- endcomment -%}
+        {%- if settings.finanslaget_enabled -%}
+          {%- render 'finanslaget', product: product, variant: current_variant -%}
+        {%- endif -%}
+
+        {%- comment -%} Add to cart form {%- endcomment -%}
+        {%- form 'product', product, id: 'product-form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+          {%- if product.available -%}
+            <div class="product-details__quantity">
+              <label for="quantity" class="visually-hidden">{{ 'products.product.quantity' | t }}</label>
+              <div class="quantity-selector">
+                <button type="button" class="quantity-selector__btn" data-qty-change="-1" aria-label="Minska antal">−</button>
+                <input
+                  type="number"
+                  id="quantity"
+                  name="quantity"
+                  value="1"
+                  min="1"
+                  class="quantity-selector__input"
+                  aria-label="{{ 'products.product.quantity' | t }}"
+                >
+                <button type="button" class="quantity-selector__btn" data-qty-change="1" aria-label="Öka antal">+</button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              name="add"
+              class="btn btn--primary btn--full product-details__atc"
+              data-add-to-cart
+            >
+              <span>{{ 'products.product.add_to_cart' | t }}</span>
+              <span class="btn__loading" hidden>
+                <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
+              </span>
+            </button>
+          {%- else -%}
+            <button type="button" class="btn btn--disabled btn--full" disabled>
+              {{ 'products.product.sold_out' | t }}
+            </button>
+          {%- endif -%}
+        {%- endform -%}
+
+        {%- comment -%} Specs table {%- endcomment -%}
+        {%- if settings.show_specs_table -%}
+          {%- render 'product-specs', product: product -%}
+        {%- endif -%}
+
+        {%- comment -%} Description {%- endcomment -%}
+        {%- if product.description != blank -%}
+          <div class="product-details__description">
+            <details open>
+              <summary class="product-details__accordion-toggle">{{ 'products.product.description' | t }}</summary>
+              <div class="product-details__description-body rte">
+                {{ product.description }}
+              </div>
+            </details>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Shipping info accordion {%- endcomment -%}
+        <div class="product-details__accordion">
+          <details>
+            <summary class="product-details__accordion-toggle">
+              <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="1" y="3" width="15" height="13"/>
+                <path d="M16 8h4l3 3v5h-7V8z"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/>
+                <circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+              {{ 'products.product.shipping_info' | t }}
+            </summary>
+            <div class="product-details__accordion-body">
+              <p>{{ 'products.product.shipping_text' | t }}</p>
+            </div>
+          </details>
+          <details>
+            <summary class="product-details__accordion-toggle">
+              <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+              {{ 'products.product.returns_info' | t }}
+            </summary>
+            <div class="product-details__accordion-body">
+              <p>{{ 'products.product.returns_text' | t }}</p>
+            </div>
+          </details>
+        </div>
+
+      </div>{%- comment -%} /.product-details__info {%- endcomment -%}
+    </div>{%- comment -%} /.product-details__layout {%- endcomment -%}
+  </div>{%- comment -%} /.container {%- endcomment -%}
+</section>
+
+{% schema %}
+{
+  "name": "Product details",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

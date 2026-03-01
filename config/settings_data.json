@@ -1,0 +1,24 @@
+{
+  "current": {
+    "color_primary": "#1a1a1a",
+    "color_accent": "#e63329",
+    "color_background": "#ffffff",
+    "color_text": "#1a1a1a",
+    "color_text_muted": "#6b7280",
+    "color_border": "#e5e7eb",
+    "color_surface": "#f9fafb",
+    "type_body_font": "inter_n4",
+    "type_header_font": "inter_n7",
+    "font_body_size": 16,
+    "border_radius": 6,
+    "page_width": 1280,
+    "cart_type": "drawer",
+    "finanslaget_embed_code": "",
+    "finanslaget_lease_months": "36",
+    "finanslaget_enabled": true,
+    "show_condition_badge": true,
+    "show_specs_table": true,
+    "show_vat_toggle": true,
+    "animations_reveal_on_scroll": false
+  }
+}

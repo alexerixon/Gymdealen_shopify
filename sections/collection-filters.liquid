@@ -1,0 +1,146 @@
+{% comment %}
+  sections/collection-filters.liquid
+  Gymdealen.se — Collection page with left sidebar filter panel
+  Uses Shopify Search & Discovery app filter data
+{% endcomment %}
+
+{%- paginate collection.products by section.settings.products_per_page -%}
+
+<section class="collection-page" data-section-id="{{ section.id }}">
+  <div class="container">
+
+    {%- comment -%} Collection header {%- endcomment -%}
+    <div class="collection-page__header">
+      <h1 class="collection-page__title">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <div class="collection-page__description rte">{{ collection.description }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Mobile filter button {%- endcomment -%}
+    <div class="collection-page__mobile-toolbar">
+      <button class="btn btn--outline collection-page__filter-btn" data-filter-drawer-toggle>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="4" y1="6" x2="20" y2="6"/>
+          <line x1="8" y1="12" x2="20" y2="12"/>
+          <line x1="12" y1="18" x2="20" y2="18"/>
+        </svg>
+        {{ 'collection.filter_drawer_open' | t }}
+        {%- if collection.filters.size > 0 -%}
+          {%- assign active_count = 0 -%}
+          {%- for filter in collection.filters -%}
+            {%- assign active_count = active_count | plus: filter.active_values.size -%}
+          {%- endfor -%}
+          {%- if active_count > 0 -%}
+            <span class="filter-badge">{{ active_count }}</span>
+          {%- endif -%}
+        {%- endif -%}
+      </button>
+      <div class="collection-page__sort">
+        {%- render 'sort-by' -%}
+      </div>
+    </div>
+
+    <div class="collection-page__body">
+
+      {%- comment -%} ——————————————————————————
+        SIDEBAR FILTERS
+      —————————————————————————— {%- endcomment -%}
+      <aside class="collection-sidebar" id="collection-sidebar" aria-label="{{ 'collection.sidebar_heading' | t }}">
+        <div class="collection-sidebar__inner">
+          <div class="collection-sidebar__heading">
+            <h2>{{ 'collection.sidebar_heading' | t }}</h2>
+            {%- assign active_count = 0 -%}
+            {%- for filter in collection.filters -%}
+              {%- assign active_count = active_count | plus: filter.active_values.size -%}
+            {%- endfor -%}
+            {%- if active_count > 0 -%}
+              <a href="{{ collection.url }}" class="collection-sidebar__clear">{{ 'products.search_and_filter.clear_all' | t }}</a>
+            {%- endif -%}
+          </div>
+
+          {%- comment -%} Active filter chips {%- endcomment -%}
+          {%- render 'active-filters', collection: collection -%}
+
+          {%- comment -%} Filter groups {%- endcomment -%}
+          {%- for filter in collection.filters -%}
+            {%- render 'filter-group', filter: filter -%}
+          {%- endfor -%}
+
+        </div>
+      </aside>
+
+      {%- comment -%} ——————————————————————————
+        PRODUCT GRID
+      —————————————————————————— {%- endcomment -%}
+      <div class="collection-page__main">
+        {%- comment -%} Desktop sort + product count {%- endcomment -%}
+        <div class="collection-page__toolbar">
+          <p class="collection-page__count">
+            {%- if collection.products_count == collection.all_products_count -%}
+              {{ 'products.search_and_filter.product_count' | t: count: collection.products_count }}
+            {%- else -%}
+              {{ 'products.search_and_filter.product_count' | t: count: collection.products_count }}
+              {{ 'products.search_and_filter.showing' | t: from: 1, to: [paginate.current_offset | plus: paginate.page_size, collection.products_count] | min, total: collection.all_products_count }}
+            {%- endif -%}
+          </p>
+          <div class="collection-page__sort-desktop">
+            {%- render 'sort-by' -%}
+          </div>
+        </div>
+
+        {%- comment -%} Product grid (ID used by AJAX section rendering) {%- endcomment -%}
+        <div class="product-grid" id="product-grid" data-id="{{ section.id }}">
+          {%- if collection.products.size > 0 -%}
+            {%- for product in collection.products -%}
+              {%- render 'product-card', product: product, lazy: forloop.index > 4 -%}
+            {%- endfor -%}
+          {%- else -%}
+            <p class="product-grid__empty">{{ 'collection.no_products' | t }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Pagination {%- endcomment -%}
+        {%- if paginate.pages > 1 -%}
+          <div class="collection-page__pagination">
+            {{ paginate | default_pagination: next_label: 'Nästa', previous_label: 'Föregående' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>{%- comment -%} /.collection-page__body {%- endcomment -%}
+  </div>
+</section>
+
+{%- comment -%} Mobile filter drawer overlay {%- endcomment -%}
+<div class="filter-drawer-overlay" data-filter-drawer-overlay></div>
+
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Collection filters",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "grid_columns",
+      "label": "Product grid columns (desktop)",
+      "options": [
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "4"
+    }
+  ]
+}
+{% endschema %}

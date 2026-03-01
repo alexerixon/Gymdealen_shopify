@@ -1,0 +1,64 @@
+{% comment %}
+  snippets/active-filters.liquid
+  Renders active filter chips above the product grid with × remove buttons
+
+  Usage:
+    render 'active-filters', collection: collection
+{% endcomment %}
+
+{%- assign has_active_filters = false -%}
+{%- for filter in collection.filters -%}
+  {%- if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value -%}
+    {%- assign has_active_filters = true -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if has_active_filters -%}
+  <div class="active-filters" aria-label="{{ 'products.search_and_filter.active_filters' | t }}">
+    {%- for filter in collection.filters -%}
+      {%- if filter.type == 'price_range' -%}
+        {%- if filter.min_value.value or filter.max_value.value -%}
+          <a
+            href="{{ filter.url_to_remove }}"
+            class="active-filter-chip"
+            aria-label="Ta bort prisfilter"
+          >
+            {{ 'products.search_and_filter.price_range.label' | t }}:
+            {%- if filter.min_value.value -%}
+              {{ filter.min_value.value | divided_by: 100 | ceil }} kr
+            {%- else -%}
+              0 kr
+            {%- endif -%}
+            –
+            {%- if filter.max_value.value -%}
+              {{ filter.max_value.value | divided_by: 100 | ceil }} kr
+            {%- else -%}
+              {{ filter.range_max | divided_by: 100 | ceil }} kr
+            {%- endif -%}
+            <svg class="active-filter-chip__remove" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M2 2l8 8M10 2l-8 8"/>
+            </svg>
+          </a>
+        {%- endif -%}
+      {%- else -%}
+        {%- for value in filter.active_values -%}
+          <a
+            href="{{ value.url_to_remove }}"
+            class="active-filter-chip"
+            aria-label="Ta bort filter: {{ value.label }}"
+          >
+            {{ value.label }}
+            <svg class="active-filter-chip__remove" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M2 2l8 8M10 2l-8 8"/>
+            </svg>
+          </a>
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- comment -%} Clear all link {%- endcomment -%}
+    <a href="{{ collection.url }}" class="active-filter-chip active-filter-chip--clear">
+      {{ 'products.search_and_filter.clear_all' | t }}
+    </a>
+  </div>
+{%- endif -%}

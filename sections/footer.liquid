@@ -1,0 +1,175 @@
+{% comment %}
+  sections/footer.liquid
+  Gymdealen.se — Site footer
+{% endcomment %}
+
+<footer class="site-footer">
+  <div class="site-footer__main">
+    <div class="container site-footer__grid">
+      {%- comment -%} Brand column {%- endcomment -%}
+      <div class="site-footer__col site-footer__col--brand">
+        {%- if settings.logo != blank -%}
+          <a href="{{ routes.root_url }}" class="site-footer__logo">
+            {{
+              settings.logo
+              | image_url: width: 140
+              | image_tag: width: 140, alt: shop.name
+            }}
+          </a>
+        {%- else -%}
+          <a href="{{ routes.root_url }}" class="site-footer__logo-text">{{ shop.name }}</a>
+        {%- endif -%}
+
+        {%- if section.settings.tagline != blank -%}
+          <p class="site-footer__tagline">{{ section.settings.tagline }}</p>
+        {%- endif -%}
+
+        {%- comment -%} Social links {%- endcomment -%}
+        <div class="site-footer__social">
+          {%- if settings.social_instagram_link != blank -%}
+            <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if settings.social_facebook_link != blank -%}
+            <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if settings.social_linkedin_link != blank -%}
+            <a href="{{ settings.social_linkedin_link }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                <rect x="2" y="9" width="4" height="12"/>
+                <circle cx="4" cy="4" r="2"/>
+              </svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- comment -%} Quick links columns from footer menus {%- endcomment -%}
+      {%- for i in (1..3) -%}
+        {%- assign menu_setting = 'footer_menu_' | append: i -%}
+        {%- assign heading_setting = 'footer_menu_heading_' | append: i -%}
+        {%- assign menu_handle = section.settings[menu_setting] -%}
+        {%- if menu_handle != blank and linklists[menu_handle].links.size > 0 -%}
+          <div class="site-footer__col">
+            {%- if section.settings[heading_setting] != blank -%}
+              <h3 class="site-footer__col-heading">{{ section.settings[heading_setting] }}</h3>
+            {%- endif -%}
+            <ul class="site-footer__links">
+              {%- for link in linklists[menu_handle].links -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- comment -%} Contact column {%- endcomment -%}
+      <div class="site-footer__col">
+        <h3 class="site-footer__col-heading">{{ 'sections.footer.contact' | t }}</h3>
+        <ul class="site-footer__contact">
+          {%- if section.settings.contact_email != blank -%}
+            <li>
+              <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.contact_phone != blank -%}
+            <li>
+              <a href="tel:{{ section.settings.contact_phone | remove: ' ' }}">{{ section.settings.contact_phone }}</a>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.contact_address != blank -%}
+            <li>{{ section.settings.contact_address }}</li>
+          {%- endif -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom">
+    <div class="container site-footer__bottom-inner">
+      <p class="site-footer__copyright">
+        {{ 'sections.footer.copyright' | t: year: 'now' | date: '%Y', shop_name: shop.name }}
+      </p>
+      <div class="site-footer__payment-icons">
+        {%- comment -%} Payment method icons (inline SVGs for performance) {%- endcomment -%}
+        <span class="payment-badge" aria-label="Klarna">Klarna</span>
+        <span class="payment-badge" aria-label="Swish">Swish</span>
+        <span class="payment-badge" aria-label="Visa">Visa</span>
+        <span class="payment-badge" aria-label="Mastercard">MC</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Begagnad gymutrustning i toppklass"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu_1",
+      "label": "Footer menu 1"
+    },
+    {
+      "type": "text",
+      "id": "footer_menu_heading_1",
+      "label": "Footer menu 1 heading",
+      "default": "Kategorier"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu_2",
+      "label": "Footer menu 2"
+    },
+    {
+      "type": "text",
+      "id": "footer_menu_heading_2",
+      "label": "Footer menu 2 heading",
+      "default": "Information"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu_3",
+      "label": "Footer menu 3"
+    },
+    {
+      "type": "text",
+      "id": "footer_menu_heading_3",
+      "label": "Footer menu 3 heading",
+      "default": "Kundservice"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Contact email"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Contact phone"
+    },
+    {
+      "type": "text",
+      "id": "contact_address",
+      "label": "Address"
+    }
+  ]
+}
+{% endschema %}

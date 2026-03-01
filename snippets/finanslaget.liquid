@@ -1,0 +1,63 @@
+{% comment %}
+  snippets/finanslaget.liquid
+  Gymdealen.se — Finanslaget lease calculator widget
+
+  Usage:
+    render 'finanslaget', product: product, variant: current_variant
+
+  Settings used:
+    settings.finanslaget_enabled          — master on/off
+    settings.finanslaget_embed_code       — paste Finanslaget embed HTML here
+    settings.finanslaget_lease_months     — fallback calculation divisor (default 36)
+{% endcomment %}
+
+{%- assign price_in_ore = variant.price | default: product.price -%}
+{%- assign price_sek = price_in_ore | divided_by: 100.0 -%}
+{%- assign lease_months = settings.finanslaget_lease_months | default: 36 | plus: 0 -%}
+{%- assign monthly_estimate = price_sek | divided_by: lease_months | ceil -%}
+
+<div class="finanslaget-widget" data-price="{{ price_sek }}" data-price-ore="{{ price_in_ore }}" aria-label="{{ 'products.finanslaget.heading' | t }}">
+  <div class="finanslaget-widget__header">
+    <svg class="finanslaget-widget__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="2" y="5" width="20" height="14" rx="2"/>
+      <line x1="2" y1="10" x2="22" y2="10"/>
+    </svg>
+    <span>{{ 'products.finanslaget.heading' | t }}</span>
+  </div>
+
+  {%- if settings.finanslaget_embed_code != blank -%}
+    {%- comment -%}
+      Embed widget provided by Finanslaget.
+      The embed code can reference the price via data attributes on the parent div.
+      Finanslaget JS will read data-price (SEK value) and render the widget.
+    {%- endcomment -%}
+    <div class="finanslaget-widget__embed">
+      {{ settings.finanslaget_embed_code }}
+    </div>
+  {%- else -%}
+    {%- comment -%}
+      Fallback: simple monthly estimate until Finanslaget widget code is configured
+    {%- endcomment -%}
+    <div class="finanslaget-widget__estimate">
+      <p class="finanslaget-widget__monthly">
+        {{ 'products.finanslaget.from' | t }}
+        <strong class="finanslaget-widget__amount" data-monthly-estimate="{{ monthly_estimate }}">
+          {{ monthly_estimate }} kr
+        </strong>
+        {{ 'products.finanslaget.suffix' | t }}
+      </p>
+      <p class="finanslaget-widget__disclaimer">{{ 'products.finanslaget.disclaimer' | t }}</p>
+    </div>
+  {%- endif -%}
+
+  {%- if settings.finanslaget_cta_url != blank -%}
+    <a href="{{ settings.finanslaget_cta_url }}" class="finanslaget-widget__cta" target="_blank" rel="noopener noreferrer">
+      {{ 'products.finanslaget.cta' | t }}
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+        <polyline points="15 3 21 3 21 9"/>
+        <line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>
+    </a>
+  {%- endif -%}
+</div>
