@@ -26,6 +26,7 @@
   <a href="{{ product.url }}" class="product-card__link" tabindex="-1" aria-hidden="true">
     <div class="product-card__image-wrap">
       {%- if featured_image -%}
+        {%- assign card_alt = featured_image.alt | escape -%}
         {{
           featured_image
           | image_url: width: 600
@@ -33,7 +34,7 @@
             width: featured_image.width,
             height: featured_image.height,
             class: 'product-card__image',
-            alt: featured_image.alt | escape,
+            alt: card_alt,
             loading: loading
         }}
       {%- else -%}

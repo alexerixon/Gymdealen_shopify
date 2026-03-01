@@ -81,7 +81,9 @@
               {{ 'products.search_and_filter.product_count' | t: count: collection.products_count }}
             {%- else -%}
               {{ 'products.search_and_filter.product_count' | t: count: collection.products_count }}
-              {{ 'products.search_and_filter.showing' | t: from: 1, to: [paginate.current_offset | plus: paginate.page_size, collection.products_count] | min, total: collection.all_products_count }}
+              {%- assign to_count = paginate.current_offset | plus: paginate.page_size -%}
+              {%- if to_count > collection.products_count -%}{%- assign to_count = collection.products_count -%}{%- endif -%}
+              {{ 'products.search_and_filter.showing' | t: from: 1, to: to_count, total: collection.all_products_count }}
             {%- endif -%}
           </p>
           <div class="collection-page__sort-desktop">

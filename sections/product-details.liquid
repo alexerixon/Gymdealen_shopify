@@ -19,6 +19,7 @@
         {%- comment -%} Main image {%- endcomment -%}
         <div class="product-gallery__main" id="product-gallery-main">
           {%- if featured_media -%}
+            {%- assign featured_alt = featured_media.alt | escape -%}
             <div class="product-gallery__slide is-active" data-media-id="{{ featured_media.id }}">
               {{
                 featured_media
@@ -27,7 +28,7 @@
                   width: featured_media.width,
                   height: featured_media.height,
                   class: 'product-gallery__img',
-                  alt: featured_media.alt | escape,
+                  alt: featured_alt,
                   loading: 'eager'
               }}
             </div>
@@ -38,6 +39,7 @@
           {%- endif -%}
 
           {%- for media in product.media offset: 1 -%}
+            {%- assign media_alt = media.alt | escape -%}
             <div class="product-gallery__slide" data-media-id="{{ media.id }}">
               {{
                 media
@@ -46,7 +48,7 @@
                   width: media.width,
                   height: media.height,
                   class: 'product-gallery__img',
-                  alt: media.alt | escape,
+                  alt: media_alt,
                   loading: 'lazy'
               }}
             </div>
@@ -57,6 +59,7 @@
         {%- if product.media.size > 1 -%}
           <div class="product-gallery__thumbs" id="product-gallery-thumbs" role="list">
             {%- for media in product.media -%}
+              {%- assign thumb_alt = media.alt | escape -%}
               <button
                 class="product-gallery__thumb{% if forloop.first %} is-active{% endif %}"
                 data-media-id="{{ media.id }}"
@@ -66,7 +69,7 @@
                 {{
                   media
                   | image_url: width: 100
-                  | image_tag: width: 100, height: 100, class: 'product-gallery__thumb-img', alt: media.alt | escape
+                  | image_tag: width: 100, height: 100, class: 'product-gallery__thumb-img', alt: thumb_alt
                 }}
               </button>
             {%- endfor -%}
